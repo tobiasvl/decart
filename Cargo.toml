@@ -1,0 +1,10 @@
+[package]
+name = "decart"
+version = "0.0.1"
+edition = "2018"
+license = "MIT"
+description = "Rust library for reading and generating Octo cartridges"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
