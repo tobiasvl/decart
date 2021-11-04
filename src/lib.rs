@@ -64,8 +64,7 @@ pub enum Error {
 impl FromStr for OctoCart {
     type Err = serde_json::Error;
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        let octo_cart = serde_json::from_str(s)?;
-        Ok(octo_cart)
+        serde_json::from_str(s)
     }
 }
 
@@ -82,8 +81,7 @@ impl fmt::Display for OctoCart {
 pub fn from_file<P: AsRef<Path>>(path: P) -> Result<OctoCart, Error> {
     let file = File::open(path)?;
     let string = decode_octocart(file)?;
-    let cart = OctoCart::from_str(&string)?;
-    Ok(cart)
+    Ok(OctoCart::from_str(&string)?)
 }
 
 /// Decodes an Octocart, and returns the decoded JSON payload as a string.
