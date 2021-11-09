@@ -28,7 +28,7 @@
 //! * To interpret an assembled program, check out the [`deca`] crate (backend) or
 //!   a program like [`termin-8`] (frontend and graphics).
 
-use octopt::*;
+use octopt::Options;
 use serde::{Deserialize, Serialize};
 use std::fmt;
 use std::fs::File;
@@ -39,12 +39,12 @@ use std::u8;
 use thiserror::Error;
 
 /// Representation of the payload in the Octo cartridge.
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct OctoCart {
     /// The source code of the `.8o` file used to generated the Octocart, as a string of ASCII characters
-    program: String,
+    pub program: String,
     /// Representation of the Octo runtime settings required to run this program correctly
-    options: OctoOptions,
+    pub options: Options,
 }
 
 /// Represents the types of errors that can occur during decoding of an Octocart.

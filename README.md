@@ -4,7 +4,7 @@ decart
 [![docs.rs](https://img.shields.io/docsrs/decart.svg)](https://docs.rs/decart)
 [![dependency status](https://deps.rs/crate/decart/0.0.3/status.svg)](https://deps.rs/crate/decart/)
 
-`decart` is a library and (in the future) a command-line tool for reading and generating "Octocarts",
+`decart` is a library and a command-line tool for reading and (in the future) generating "Octocarts",
 CHIP-8 game cartridges for the [Octo](https://github.com/JohnEarnest/Octo) environment, written in Rust.
 
 Use cases

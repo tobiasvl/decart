@@ -1,0 +1,3 @@
+[submodule "examples/octo-sublime"]
+	path = examples/octo-sublime
+	url = https://github.com/mattmikolay/octo-sublime.git
