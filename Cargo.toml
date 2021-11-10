@@ -1,6 +1,6 @@
 [package]
 name = "decart"
-version = "0.0.5"
+version = "0.0.6"
 edition = "2021"
 license = "MIT"
 description = "Rust library for reading and generating Octo cartridges"
@@ -20,6 +20,7 @@ assert-json-diff = "2.0"
 clap = "2.33"
 colored_json = "2"
 syntect = "4.6"
+atty = "0.2.14"
 
 [[example]]
 name = "decart"

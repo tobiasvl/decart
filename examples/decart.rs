@@ -1,6 +1,7 @@
 use std::ffi::OsStr;
 use std::path::Path;
 
+use atty::Stream;
 use clap::{crate_version, App, Arg};
 use colored_json::prelude::*;
 use decart::*;
@@ -53,30 +54,34 @@ pub fn main() {
                     .value_of("output-file")
                     .unwrap_or(&format!("{}{:?}", path.display(), stem));
         } else if matches.is_present("print program") {
-            let mut ssb = SyntaxSetBuilder::new();
-            ssb.add(
-                SyntaxDefinition::load_from_str(
-                    include_str!("octo-sublime/Octo.sublime-syntax"),
-                    false,
-                    None,
-                )
-                .unwrap(),
-            );
-            let ps = ssb.build();
+            if atty::is(Stream::Stdout) {
+                let mut ssb = SyntaxSetBuilder::new();
+                ssb.add(
+                    SyntaxDefinition::load_from_str(
+                        include_str!("octo-sublime/Octo.sublime-syntax"),
+                        false,
+                        None,
+                    )
+                    .unwrap(),
+                );
+                let ps = ssb.build();
 
-            let syntax = ps.find_syntax_by_extension("8o").unwrap();
+                let syntax = ps.find_syntax_by_extension("8o").unwrap();
 
-            let mut theme_cursor = std::io::Cursor::new(include_bytes!("Monokai.tmTheme"));
-            let theme = ThemeSet::load_from_reader(&mut theme_cursor).unwrap();
+                let mut theme_cursor = std::io::Cursor::new(include_bytes!("Monokai.tmTheme"));
+                let theme = ThemeSet::load_from_reader(&mut theme_cursor).unwrap();
 
-            let mut h = HighlightLines::new(syntax, &theme);
-            let mut s = Vec::new();
-            for line in LinesWithEndings::from(&cart.program) {
-                let ranges: Vec<(Style, &str)> = h.highlight(line, &ps);
-                let escaped = as_24_bit_terminal_escaped(&ranges[..], false);
-                s.push(escaped);
+                let mut h = HighlightLines::new(syntax, &theme);
+                let mut s = Vec::new();
+                for line in LinesWithEndings::from(&cart.program) {
+                    let ranges: Vec<(Style, &str)> = h.highlight(line, &ps);
+                    let escaped = as_24_bit_terminal_escaped(&ranges[..], false);
+                    s.push(escaped);
+                }
+                println!("{}", s.join(""));
+            } else {
+                println!("{}", &cart.program);
             }
-            println!("{}", s.join(""));
         } else {
             println!("{}", cart.to_string().to_colored_json_auto().unwrap());
         }
