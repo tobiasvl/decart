@@ -1,6 +1,6 @@
 [package]
 name = "decart"
-version = "0.0.6"
+version = "0.0.7"
 edition = "2021"
 license = "MIT"
 description = "Rust library for reading and generating Octo cartridges"
