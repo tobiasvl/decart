@@ -5,7 +5,7 @@ use std::path::Path;
 use atty::Stream;
 use clap::{crate_version, App, Arg};
 use colored_json::prelude::*;
-use decart::*;
+use decart::{from_file, OctoCart};
 
 use syntect::easy::HighlightLines;
 use syntect::highlighting::{Style, ThemeSet};
@@ -21,12 +21,12 @@ pub fn main() {
             App::new("decode")
             .about("Decode an Octocart. If no options are supplied, the full JSON payload will be printed to stdout.")
             .arg(Arg::with_name("print program")
-                .short("p")
+                .short('p')
                 .long("print-program")
                 .help("instead of printing the entire JSON payload to stdout, print just the Octo program source code.")
             )
             .arg(Arg::with_name("write files")
-                .short("w")
+                .short('w')
                 .long("write-files")
                 .takes_value(true)
                 .value_name("output file stem")
@@ -43,6 +43,10 @@ pub fn main() {
                 .required(true)
                 .value_name("OCTOCART")
             )
+        )
+        .subcommand(
+            App::new("encode")
+            .about("Encode an Octocart")
         )
         .get_matches();
 
@@ -92,7 +96,8 @@ pub fn main() {
                 let mut h = HighlightLines::new(syntax, &theme);
                 let mut s = Vec::new();
                 for line in LinesWithEndings::from(&cart.program) {
-                    let ranges: Vec<(Style, &str)> = h.highlight(line, &ps);
+                    let ranges: Vec<(Style, &str)> =
+                        h.highlight_line(line, &ps).expect("Highlighting failed");
                     let escaped = as_24_bit_terminal_escaped(&ranges[..], false);
                     s.push(escaped);
                 }
@@ -108,5 +113,7 @@ pub fn main() {
                     .expect("Failed to print Octocart JSON payload")
             );
         }
+    } else if let Some(_matches) = matches.subcommand_matches("encode") {
+        todo!();
     }
 }

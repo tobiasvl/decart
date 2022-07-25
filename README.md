@@ -12,25 +12,21 @@ Use cases
 
 * Decoding: You can extract the program source code and runtime settings from an
   Octocart file. The source code can be assembled into CHIP-8 bytecode with Octo or
-  [`decasm`]. The runtime settings can be given to a CHIP-8 interpreter like Octo or
-  [`deca`], or saved as JSON for the [CHIP-8
-  Archive](https://github.com/JohnEarnest/chip8Archive),
-or (in the future) as an `.octo.rc` file for [C-Octo](https://github.com/JohnEarnest/c-octo) or [`termin-8`](https://crates.io/crates/termin-8), etc.
+  [`decasm`](https://crates.io/crates/decasm). The runtime settings can be given to a CHIP-8 interpreter like Octo or
+  [`deca`](https://crates.io/crates/deca), or saved as JSON for the [CHIP-8
+  Archive](https://github.com/JohnEarnest/chip8Archive) or an `.octo.rc` file for [C-Octo](https://github.com/JohnEarnest/c-octo) or [`termin-8`](https://crates.io/crates/termin-8), etc.
 * Encoding: TODO
 
 Octocarts
 ---------
 
-Octo cartridge files, or Octocarts, are GIF89a images with a payload steganographically
-embedded in one or more animation frames. Data is stored in the least significant
-bits of colors, 1 from the red/blue channels and 2 from the green channel,
-allowing us to pack a hidden byte into every 2 successive pixels.
+Octo cartridge files, or Octocarts, are GIF89a images with a payload steganographically embedded in one or more animation frames. Data is stored in the least significant bits of colors – 1 from the red/blue channels and 2 from the green channel – allowing us to pack a hidden byte into every 2 successive pixels.
 
 The payload consists of a 32-bit length, followed by a sequence of ASCII bytes
 consisting of the JSON-encoded options dictionary and source text.
 
 An Octo cartridge contains the source code of an Octo program, and a set of
-configuration options (parsed by [`octopt`](https://crates.io/crates/octopt)
+configuration options (parsed by [`octopt`](https://crates.io/crates/octopt))
 for the CHIP-8 interpreter telling it how to run the program.
 
 See also

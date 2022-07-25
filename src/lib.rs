@@ -59,6 +59,9 @@ pub enum Error {
     /// Decoding error while deserializing data from payload
     #[error("Failed to parse payload")]
     ParsingError(#[from] serde_json::Error),
+    /// Palette error
+    #[error("Failed to parse palette")]
+    PaletteError,
 }
 
 impl FromStr for OctoCart {
@@ -78,6 +81,10 @@ impl fmt::Display for OctoCart {
 }
 
 /// Read and decode Octocart from a file path
+///
+/// # Errors
+///
+/// Returns `Err` if opening the file or decoding the Octocart fails.
 pub fn from_file<P: AsRef<Path>>(path: P) -> Result<OctoCart, Error> {
     let file = File::open(path)?;
     let string = decode_octocart(file)?;
@@ -103,32 +110,34 @@ pub fn from_file<P: AsRef<Path>>(path: P) -> Result<OctoCart, Error> {
 /// use decart::*;
 /// let cart: OctoCart = from_file("test_octocart.gif").unwrap();
 /// ```
-pub fn decode_octocart<R: Read>(input: R) -> Result<String, gif::DecodingError> {
+/// # Errors
+///
+/// Returns `Err` if there is a GIF decoding error.
+pub fn decode_octocart<R: Read>(input: R) -> Result<String, Error> {
     let mut decoder = gif::DecodeOptions::new().read_info(input)?;
-    let palette = &decoder.global_palette().unwrap().to_vec();
+    let global_palette = decoder
+        .global_palette()
+        .ok_or(Error::PaletteError)?
+        .to_vec();
     let mut size: u32 = 0;
     let mut first_frame = true;
     let mut json_string = String::new();
 
-    'frame_loop: while let Ok(Some(frame)) = decoder.read_next_frame() {
-        let palette = frame.palette.as_ref().unwrap_or(palette);
+    'frame_loop: while let Some(frame) = decoder.read_next_frame()? {
+        let palette = frame.palette.as_ref().unwrap_or(&global_palette);
         if first_frame {
-            size = ((byte(&frame.buffer, palette, 0) as u32) << 24)
-                | ((byte(&frame.buffer, palette, 2) as u32) << 16)
-                | ((byte(&frame.buffer, palette, 4) as u32) << 8)
-                | byte(&frame.buffer, palette, 6) as u32;
+            size = ((u32::from(byte(&frame.buffer, palette, 0))) << 24)
+                | ((u32::from(byte(&frame.buffer, palette, 2))) << 16)
+                | ((u32::from(byte(&frame.buffer, palette, 4))) << 8)
+                | u32::from(byte(&frame.buffer, palette, 6));
             json_string = String::with_capacity(size as usize);
         }
         for pixel in (0..frame.buffer.len()).step_by(2) {
             if size == 0 {
                 break 'frame_loop;
             }
-            if first_frame {
-                if pixel < 8 {
-                    continue;
-                } else {
-                    first_frame = false;
-                }
+            if first_frame && pixel >= 8 {
+                first_frame = false;
             }
             json_string.push(byte(&frame.buffer, palette, pixel) as char);
             size -= 1;
