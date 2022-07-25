@@ -7,10 +7,10 @@
 //!
 //! * Decoding: You can extract the program source code and runtime settings from an
 //!   Octocart file. The source code can be assembled into CHIP-8 bytecode with Octo or
-//!   [`decasm`]. The runtime settings can be given to a CHIP-8 interpreter like Octo or
-//!   [`deca`], or saved as JSON for the [CHIP-8
+//!   [`decasm`](https://crates.io/crates/decasm). The runtime settings can be given to a CHIP-8 interpreter like Octo or
+//!   [`deca`](https://crates.io/crates/deca), or saved as JSON for the [CHIP-8
 //!   Archive](https://github.com/JohnEarnest/chip8Archive), as an `.octo.rc` file for C-Octo or
-//!   [`termin-8`], etc.
+//!   [`termin-8`](https://crates.io/crates/termin-8), etc.
 //! * Encoding: TODO
 //!
 //! Octo cartridge files are GIF89a images with a payload steganographically
@@ -24,9 +24,9 @@
 //! An Octo cartridge contains the source code of an Octo program, and a set of
 //! options for the Octo runtime on how to run the program.
 //!
-//! * To compile/assemble the source code, check out the [`decasm`] crate.
-//! * To interpret an assembled program, check out the [`deca`] crate (backend) or
-//!   a program like [`termin-8`] (frontend and graphics).
+//! * To compile/assemble the source code, check out the [`decasm`](https://crates.io/crates/decasm) crate.
+//! * To interpret an assembled program, check out the [`deca`](https://crates.io/crates/deca) crate (backend) or
+//!   a program like [`termin-8`](https://crates.io/crates/termin-8) (frontend and graphics).
 
 use octopt::Options;
 use serde::{Deserialize, Serialize};

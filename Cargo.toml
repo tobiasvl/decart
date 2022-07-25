@@ -1,10 +1,10 @@
 [package]
 name = "decart"
-version = "0.0.8"
-authors = ["Tobias V. Langhoff"]
+version = "0.0.9"
+authors = ["Tobias V. Langhoff <tobias@langhoff.no>"]
 edition = "2021"
 license = "MIT"
-description = "Rust library for reading and generating Octo cartridges"
+description = "Octo cartridge encoder/decoder"
 repository = "https://github.com/tobiasvl/decart"
 categories = ["encoding", "command-line-utilities"]
 documentation = "https://docs.rs/decart"

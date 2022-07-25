@@ -3,7 +3,7 @@ use std::io::prelude::*;
 use std::path::Path;
 
 use atty::Stream;
-use clap::{crate_version, App, Arg};
+use clap::{crate_authors, crate_description, crate_name, crate_version, App, Arg};
 use colored_json::prelude::*;
 use decart::{from_file, OctoCart};
 
@@ -13,10 +13,10 @@ use syntect::parsing::{SyntaxDefinition, SyntaxSetBuilder};
 use syntect::util::{as_24_bit_terminal_escaped, LinesWithEndings};
 
 pub fn main() {
-    let matches = App::new("decart")
+    let matches = App::new(crate_name!())
         .version(crate_version!())
-        .author("Tobias V. Langhoff <tobias@langhoff.no>")
-        .about("Octocart encoder/decoder")
+        .author(crate_authors!())
+        .about(crate_description!())
         .subcommand(
             App::new("decode")
             .about("Decode an Octocart. If no options are supplied, the full JSON payload will be printed to stdout.")
